@@ -1,5 +1,11 @@
-import os
+# import os
 import streamlit as st
+
+QDRANT_URL = st.secrets["QDRANT_URL"]
+QDRANT_API_KEY = st.secrets["QDRANT_API_KEY"]
+OPENAI_API_KEY = st.secrets["OPENAI_API_KEY"]
+
+st.write(QDRANT_API_KEY)
 
 from langchain_openai import ChatOpenAI
 from langchain_openai import OpenAIEmbeddings
@@ -11,10 +17,10 @@ from langchain_core.messages import ToolMessage
 from dotenv import load_dotenv
 
 # Mengakses variabel dari file .env
-load_dotenv()
-QDRANT_URL = os.getenv("QDRANT_URL")
-QDRANT_API_KEY = os.getenv("QDRANT_API_KEY")
-OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+# load_dotenv()
+# QDRANT_URL = os.getenv("QDRANT_URL")
+# QDRANT_API_KEY = os.getenv("QDRANT_API_KEY")
+# OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 
 llm = ChatOpenAI(
     model="gpt-4o-mini",

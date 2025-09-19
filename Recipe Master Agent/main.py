@@ -83,7 +83,7 @@ def chat_chef(question, history):
     return response
 
 st.title("Chatbot Recipes Master")
-st.image("header_img.png")
+st.image("./Recipe Master Agent/header_img.png")
 
 # Initialize chat history
 if "messages" not in st.session_state:

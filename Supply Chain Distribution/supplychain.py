@@ -164,7 +164,7 @@ def GetMaxDayToRestock(df):
     )
 
     # Hapus kolom bantuan 'calculated_days' jika tidak diperlukan
-    df = df.drop(columns=['calculated_days'])
+    df = df.drop(columns=['calculated_days'], axis=1)
     return df['max_days_to_restock'].values
 
 current_date = datetime.date.today()
@@ -174,12 +174,13 @@ st.set_page_config(
     page_title="Supply Chain Optimization",
     page_icon="📊"
 )
-st.title("Supply Chain in Single Warehouse Optimization")
+st.title("Supply Chain for Warehouse Optimization")
 st.header("Assumptions")
 st.markdown(f'''
 -  Current Date : {current_date}
 -  Replenishment Lead Time : 7 (for all items)
 -  Sales transaction record generated randomly.
+-  Transaction data will be re-generate every refresh/reload apps.
 ''')
 
 tab1, tab2, tab3 = st.tabs(["Warehouse 1", "Warehouse 2", "Warehouse 3"])
@@ -201,7 +202,7 @@ with tab1:
         get_item_estimation = GetQuantityNeeded(combined_df1)
         combined_df1 = pd.merge(combined_df1, get_item_estimation, on='sku')
         combined_df1["max_days_to_restock"] = GetMaxDayToRestock(combined_df1)
-        st.dataframe(combined_df1)
+        st.dataframe(combined_df1.drop(columns=['calculated_days'], axis=1))
 with tab2:
     st.header("Warehouse 2 Information")
     wh2 = GenerateDataSales(current_date)
@@ -220,7 +221,7 @@ with tab2:
         get_item_estimation = GetQuantityNeeded(combined_df2)
         combined_df2 = pd.merge(combined_df2, get_item_estimation, on='sku')
         combined_df2["max_days_to_restock"] = GetMaxDayToRestock(combined_df2)
-        st.dataframe(combined_df2)
+        st.dataframe(combined_df2.drop(columns=['calculated_days'], axis=1))
 with tab3:
     st.header("Warehouse 3 Information")
     wh3 = GenerateDataSales(current_date)
@@ -238,4 +239,4 @@ with tab3:
         get_item_estimation = GetQuantityNeeded(combined_df3)
         combined_df3 = pd.merge(combined_df3, get_item_estimation, on='sku')
         combined_df3["max_days_to_restock"] = GetMaxDayToRestock(combined_df3)
-        st.dataframe(combined_df3)
+        st.dataframe(combined_df3.drop(columns=['calculated_days'], axis=1))

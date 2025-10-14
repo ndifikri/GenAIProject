@@ -65,7 +65,7 @@ def get_relevant_docs(question):
   )
   return results
 
-tools = [get_relevant_docs]
+tools = [get_relevant_docs, search_on_google]
 
 def chat_chef(question, history):
     agent = create_react_agent(

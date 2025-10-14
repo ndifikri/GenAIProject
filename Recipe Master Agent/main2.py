@@ -15,8 +15,6 @@ from langchain_core.messages import ToolMessage
 
 from google import genai
 from google.genai import types
-from PIL import Image
-from io import BytesIO
 
 from dotenv import load_dotenv
 
@@ -38,18 +36,25 @@ qdrant = QdrantVectorStore.from_existing_collection(
 )
 
 @tool
-def generate_image(prompt):
-    """Use this tools for generate an image."""
+def search_on_google(prompt):
+    """Use this tools for searching information from google search."""
     client = genai.Client(api_key=GOOGLE_API_KEY)
-    response = client.models.generate_images(
-        model='imagen-4.0-generate-001',
-        prompt=prompt,
-        config=types.GenerateImagesConfig(
-            number_of_images= 1,
-        )
+
+    grounding_tool = types.Tool(
+        google_search=types.GoogleSearch()
     )
-    image_result = response[0].generated_images
-    return image_result
+
+    config = types.GenerateContentConfig(
+        tools=[grounding_tool]
+    )
+
+    response = client.models.generate_content(
+        model="gemini-2.5-flash",
+        contents=prompt,
+        config=config,
+    )
+
+    return response.text
 
 @tool
 def get_relevant_docs(question):

@@ -49,7 +49,10 @@ def chat_chef(question, history):
         prompt= f'''You are a master of any recipes. Answer only question about recipes and use given tools for get recipes details.'''
     )
     result = agent.invoke(
-        {"messages": [{"role": "user", "content": question}]}
+        {"messages": [
+            {
+                "role": "user",
+                "content": f"Question: {question}\nHistory Chat: {history}"}]}
     )
     answer = result["messages"][-1].content
 

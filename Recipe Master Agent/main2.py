@@ -1,16 +1,24 @@
-import os
+# import os
 import streamlit as st
+
+QDRANT_URL = st.secrets["QDRANT_URL"]
+QDRANT_API_KEY = st.secrets["QDRANT_API_KEY"]
+OPENAI_API_KEY = st.secrets["OPENAI_API_KEY"]
+GOOGLE_API_KEY = st.secrets["GOOGLE_API_KEY"]
 
 from langchain_openai import ChatOpenAI
 from langchain_openai import OpenAIEmbeddings
 from langchain_qdrant import QdrantVectorStore
 from langchain.tools import tool
 from langgraph.prebuilt import create_react_agent
+from langchain_core.messages import ToolMessage
 
-# Mengakses variabel dari file .env
-QDRANT_URL = st.text_input("QDRANT_URL", type="password")
-QDRANT_API_KEY = st.text_input("QDRANT_API_KEY", type="password")
-OPENAI_API_KEY = st.text_input("OPENAI_API_KEY", type="password")
+from google import genai
+from google.genai import types
+from PIL import Image
+from io import BytesIO
+
+from dotenv import load_dotenv
 
 llm = ChatOpenAI(
     model="gpt-4o-mini",
@@ -30,6 +38,20 @@ qdrant = QdrantVectorStore.from_existing_collection(
 )
 
 @tool
+def generate_image(prompt):
+    """Use this tools for generate an image."""
+    client = genai.Client(api_key=GOOGLE_API_KEY)
+    response = client.models.generate_images(
+        model='imagen-4.0-generate-001',
+        prompt=prompt,
+        config=types.GenerateImagesConfig(
+            number_of_images= 1,
+        )
+    )
+    image_result = response[0].generated_images
+    return image_result
+
+@tool
 def get_relevant_docs(question):
   """Use this tools for get relevant documents about recipes."""
   results = qdrant.similarity_search(
@@ -47,7 +69,10 @@ def chat_chef(question, history):
         prompt= f'''You are a master of any recipes. Answer only question about recipes and use given tools for get recipes details.'''
     )
     result = agent.invoke(
-        {"messages": [{"role": "user", "content": question}]}
+        {"messages": [
+            {
+                "role": "user",
+                "content": f"Question: {question}\nHistory Chat: {history}"}]}
     )
     answer = result["messages"][-1].content
 
@@ -64,16 +89,24 @@ def chat_chef(question, history):
             total_output_tokens += message.response_metadata["token_usage"].get("completion_tokens", 0)
 
     price = 17_000*(total_input_tokens*0.15 + total_output_tokens*0.6)/1_000_000
+
+    tool_messages = []
+    for message in result["messages"]:
+        if isinstance(message, ToolMessage):
+            tool_message_content = message.content
+            tool_messages.append(tool_message_content)
+
     response = {
         "answer": answer,
         "price": price,
         "total_input_tokens": total_input_tokens,
-        "total_output_tokens": total_output_tokens
+        "total_output_tokens": total_output_tokens,
+        "tool_messages": tool_messages
     }
     return response
 
 st.title("Chatbot Recipes Master")
-st.image("header_img.png")
+st.image("./Recipe Master Agent/header_img.png")
 
 # Initialize chat history
 if "messages" not in st.session_state:
@@ -101,6 +134,9 @@ if prompt := st.chat_input("Ask me recipes question"):
         answer = response["answer"]
         st.markdown(answer)
         st.session_state.messages.append({"role": "AI", "content": answer})
+
+    with st.expander("**Tool Calls:**"):
+        st.code(response["tool_messages"])
 
     with st.expander("**History Chat:**"):
         st.code(history)

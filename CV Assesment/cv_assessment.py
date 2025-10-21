@@ -69,7 +69,7 @@ GOOGLE_API_KEY = st.secrets["GOOGLE_API_KEY"]
 # Judul aplikasi llm
 st.title("CV Assesment")
 
-api_key = GOOGLE_API_KEY
+api_key = OPENAI_API_KEY
 if api_key:
     llm = ChatOpenAI(
         model="gpt-4o-mini",

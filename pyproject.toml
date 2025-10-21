@@ -9,6 +9,7 @@ dependencies = [
     "google-genai>=1.39.1",
     "langchain>=0.3.27",
     "langchain-community>=0.3.31",
+    "langchain-core>=0.3.79",
     "langchain-google-genai>=2.1.12",
     "langchain-openai>=0.3.33",
     "langchain-qdrant>=0.2.1",
@@ -17,4 +18,8 @@ dependencies = [
     "prophet>=1.1.7",
     "seaborn>=0.13.2",
     "streamlit>=1.49.1",
+    "supervision>=0.26.1",
+    "torch>=2.9.0",
+    "torchvision>=0.24.0",
+    "ultralytics>=8.3.218",
 ]

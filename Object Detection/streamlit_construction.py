@@ -29,9 +29,9 @@ st.title("Construction Safety Equipment Checking")
 
 selected_model = st.selectbox("Select Usecase", ("Construction Equipment", "Vehicle"))
 if selected_model == "Construction Equipment":
-    model = YOLO('./best_construction.pt')
+    model = YOLO('best_construction.pt')
 else:
-    model = YOLO('./best_vehicle2.pt')
+    model = YOLO('best_vehicle2.pt')
 
 uploaded_file = st.file_uploader("Upload Image", accept_multiple_files=False, type=["jpg", "jpeg", "png", "webp"])
 if uploaded_file is not None:

@@ -27,9 +27,11 @@ def detector_pipeline(image_bytes):
 
 st.title("Construction Safety Equipment Checking")
 
-selected_model = st.selectbox("Select Usecase", ("Construction Equipment", "Vehicle"))
+selected_model = st.selectbox("Select Usecase", ("Construction Equipment", "Vehicle", "Fruit"))
 if selected_model == "Construction Equipment":
     model = YOLO('./Object Detection/best_construction.pt')
+elif selected_model == "Fruit":
+    model = YOLO('./Object Detection/best_fruit.pt')
 else:
     model = YOLO('./Object Detection/best_vehicle2.pt')
 

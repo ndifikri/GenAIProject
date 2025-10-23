@@ -19,6 +19,7 @@ dependencies = [
     "pillow>=11.3.0",
     "plotly>=6.3.0",
     "prophet>=1.1.7",
+    "python-dotenv>=1.1.1",
     "seaborn>=0.13.2",
     "streamlit>=1.49.1",
     "supervision>=0.26.1",

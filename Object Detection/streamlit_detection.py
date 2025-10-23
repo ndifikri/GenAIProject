@@ -27,7 +27,7 @@ def detector_pipeline_pillow(image_bytes):
 
 # --- Bagian Streamlit Utama ---
 
-st.title("Construction Safety Equipment Checking")
+st.title("Object Detection")
 
 selected_model = st.selectbox("Select Usecase", ("Construction Equipment", "Vehicle", "Fruit"))
 # Asumsi path model Anda sudah benar

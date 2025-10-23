@@ -52,7 +52,7 @@ def chat_chef(question, history):
         {"messages": [
             {
                 "role": "user",
-                "content": f"Question: {question}\nHistory Chat: {history}"}]}
+                "content": f"**Question**: {question}\n\n**History Chat**: {history}"}]}
     )
     answer = result["messages"][-1].content
 

@@ -32,11 +32,11 @@ st.title("Construction Safety Equipment Checking")
 selected_model = st.selectbox("Select Usecase", ("Construction Equipment", "Vehicle", "Fruit"))
 # Asumsi path model Anda sudah benar
 if selected_model == "Construction Equipment":
-    model = YOLO('./best_construction.pt')
+    model = YOLO('./Object Detection/best_construction.pt')
 elif selected_model == "Fruit":
-    model = YOLO('./best_fruit.pt')
+    model = YOLO('./Object Detection/best_fruit.pt')
 else:
-    model = YOLO('./best_vehicle2.pt')
+    model = YOLO('./Object Detection/best_vehicle2.pt')
 
 uploaded_file = st.file_uploader("Upload Image", accept_multiple_files=False, type=["jpg", "jpeg", "png", "webp"])
 if uploaded_file is not None:
